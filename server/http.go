@@ -2,7 +2,9 @@ package server
 
 import (
 	"fmt"
+	"github.com/MenciusCheng/auto-seat/templates"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,13 +13,29 @@ import (
 func InitRouter() *gin.Engine {
 	r := gin.Default()
 
-	r.LoadHTMLGlob("templates/*")
+	t, err := LoadTemplate()
+	if err != nil {
+		panic(err)
+	}
+	r.SetHTMLTemplate(t)
 
 	r.GET("/", home)
 	r.GET("/ping", ping)
 	r.POST("/upload", upload)
 
 	return r
+}
+
+func LoadTemplate() (*template.Template, error) {
+	t := template.New("")
+	var err error
+
+	t, err = t.New("index.tmpl").Parse(templates.IndexTmpl)
+	if err != nil {
+		return nil, err
+	}
+
+	return t, nil
 }
 
 func home(c *gin.Context) {
