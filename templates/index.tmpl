@@ -1,0 +1,21 @@
+<html>
+	<h1>
+		{{ .title }}
+	</h1>
+	<form method="post" enctype="multipart/form-data" action="/upload">
+	    <p>
+            <label>Name: </label><br/>
+            <input type="text" name="name"/>
+        </p>
+
+        <!-- upload of a single file -->
+        <p>
+            <label>Add file (single): </label><br/>
+            <input type="file" name="file"/>
+        </p>
+
+        <p>
+            <input type="submit"/>
+        </p>
+    </form>
+</html>
