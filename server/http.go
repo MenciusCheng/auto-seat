@@ -2,12 +2,15 @@ package server
 
 import (
 	"fmt"
-	"github.com/MenciusCheng/auto-seat/templates"
-	"github.com/gin-gonic/gin"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+	"time"
+
+	"github.com/MenciusCheng/auto-seat/templates"
+	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
@@ -21,6 +24,8 @@ func InitRouter() *gin.Engine {
 
 	r.GET("/", home)
 	r.GET("/ping", ping)
+	r.Any("/delay", delay)
+
 	r.POST("/upload", upload)
 
 	return r
@@ -47,6 +52,21 @@ func home(c *gin.Context) {
 func ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
+	})
+}
+
+func delay(c *gin.Context) {
+	ms := c.Query("ms")
+	if len(ms) > 0 {
+		fmt.Println(ms, "ms")
+		num, err := strconv.Atoi(ms)
+		if err == nil && num > 0 {
+			time.Sleep(time.Duration(int64(num)) * time.Millisecond)
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
 	})
 }
 
